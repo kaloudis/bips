@@ -1,0 +1,118 @@
+<pre>
+  BIP: ?
+  Title: Beta (β) Symbol for the Satoshi Unit
+  Authors: Evan Kaloudis <zeusln@tutanota.com>
+  Status: Draft
+  Type: Informational
+  Created: 2026-05-29
+  License: BSD-2-Clause
+</pre>
+
+== Abstract ==
+
+This BIP proposes the Greek lowercase letter beta (β, U+03B2) as the standard typographic symbol for the satoshi, the base unit of bitcoin defined as 1/100,000,000 (one one-hundred-millionth) of one bitcoin. Under this proposal:
+
+    ₿1 = 100,000,000 β
+
+The symbol is intended for short-form display of small-value amounts in user interfaces, signage, price tags, and informal written communication, in the same role that "₿" plays for the bitcoin unit. Visually, ₿ and β read as a natural case pair: capital B for the whole unit, lowercase b for the base unit.
+
+== Motivation ==
+
+Bitcoin already has a widely recognized symbol for the bitcoin unit (₿, U+20BF). The base unit — the satoshi — has no such symbol. As bitcoin's purchasing power has grown, an ever larger share of real-world prices, Lightning invoices, and on-chain outputs are naturally expressed in satoshis rather than in fractional bitcoin. Writing out "sat" or "sats" after every figure, or relying on long decimal expansions of "BTC", is verbose and visually noisy in interfaces where space is constrained.
+
+A short, single-character symbol for the satoshi:
+
+# Reduces visual clutter in wallet UIs, point-of-sale displays, exchange interfaces, and printed material.
+# Mirrors the typographic role that ₿ already plays for the bitcoin unit, giving the two natural units of account a consistent visual treatment.
+# Provides a culturally neutral mark that does not depend on the Latin abbreviation "sat" being legible to non-English readers.
+# Gives designers and typographers a single glyph to lay out, rather than a variable-width word.
+
+A grassroots effort to identify a satoshi symbol has been ongoing for several years; see e.g. [https://bitcoin-coder-bob.github.io/SatsSymbol/ the Sats Symbol project] for an extended discussion of candidate glyphs and the design constraints involved. This BIP formalizes one such candidate — the Greek lowercase beta — and specifies its semantics and display conventions.
+
+== Specification ==
+
+'''Definition:'''
+
+* 1 β = 1 satoshi = 1/100,000,000 of one bitcoin.
+* ₿1 = 100,000,000 β.
+* The symbol is the Greek small letter beta, Unicode code point U+03B2 ("β").
+* The symbol is a typographic shorthand for the word "satoshi" (plural "satoshis"). It does not introduce a new unit; it is an additional visual representation of the existing base unit.
+
+'''Usage:'''
+
+* The symbol SHOULD trail the numeric quantity with a single space (e.g. <code>1,000 β</code>, <code>21 β</code>) — the opposite of ₿'s no-space prefix, giving the two units distinct visual roles and matching the position users already associate with the "sats" label.
+* When grouping is desired, locale-appropriate digit grouping SHOULD be used (e.g. <code>1,000,000 β</code> in en-US, <code>1.000.000 β</code> in de-DE).
+* The symbol is not a proper noun and SHOULD NOT be capitalized. The Greek capital beta (Β, U+0392) is visually indistinguishable from the Latin capital B and MUST NOT be used as the satoshi symbol; doing so would create severe ambiguity with the "B" in "BTC".
+* The ISO 4217-style currency code for bitcoin (<code>BTC</code>) is unaffected. β is a display symbol for the base unit, not a new currency code.
+
+'''Examples:'''
+
+{| class="wikitable"
+! Amount in BTC !! Equivalent in β
+|-
+| 0.00000001 BTC || 1 β
+|-
+| 0.00000100 BTC || 100 β
+|-
+| 0.00010000 BTC || 10,000 β
+|-
+| 0.01000000 BTC || 1,000,000 β
+|-
+| 1.00000000 BTC || 100,000,000 β (also written ₿1)
+|}
+
+== Rationale ==
+
+Several properties make the Greek lowercase beta a natural fit for the satoshi symbol:
+
+# '''Case-pair intuition with ₿.''' ₿ and β read as the same letter in two cases: capital B for the whole unit, lowercase b for the base unit. One letter, two scales — mirroring how "bitcoin" and "bit" are one word at two magnitudes. This makes the convention trivially teachable: ''₿1 = 100,000,000 β'' reads as "big-B bitcoin equals one hundred million little-b bits". Note that Unicode does not formally encode ₿ and β as a case pair: ₿ is U+20BF, a standalone currency sign, and β is U+03B2, a Greek lowercase letter. The pairing is a visual mnemonic, not a Unicode-canonical relationship.
+# '''Descender geometry.''' β has a true descender — a vertical stroke that drops below the baseline — in essentially the same way as the descender of ₿. Set side by side in running text, the two glyphs share visual DNA and pair cleanly in tables, prices, and inline running text.
+# '''Practical availability.''' U+03B2 has existed in Unicode since version 1.0.0 (1991), renders in essentially every general-purpose font (including monospace fonts used by terminals and code editors), and is reachable today through standard input methods (Greek polytonic keyboards, OS-level character pickers, LaTeX <code>\beta</code>, HTML <code>&amp;beta;</code>). No new glyph design or OS support is required.
+# '''Non-collision with existing currency symbols.''' Unlike "S", "$", or "¢", β is not currently used as the principal symbol of any active national currency, eliminating ambiguity in price displays.
+# '''Cultural resonance with the orange-pill motif.''' The Greek word for "vitamins" is βιταμίνες — a small but pleasing alignment between the proposed symbol and iconic Bitcoin community imagery.
+
+== Interoperability ==
+
+This section addresses two interoperability concerns: graceful coexistence with a visually similar Latin glyph, and graceful coexistence with the existing "bits" denomination defined in BIP 176.
+
+=== 1. The German eszett (ß) as an interchangeable glyph ===
+
+The Latin small letter sharp s (ß, U+00DF), commonly known as the German "eszett" or "scharfes S", is visually very similar to β at most type sizes and in most fonts. It also carries an "s" sound, which aligns with "sat"/"satoshi". For these reasons ß MAY be accepted by implementations as an interchangeable input or display form of the satoshi symbol; e.g. a user typing <code>1000 ß</code> on a German keyboard SHOULD be interpreted identically to <code>1000 β</code>, and a parser that accepts one SHOULD accept the other.
+
+However, β (Greek beta) is the '''preferred''' form on descender geometry: as noted in Rationale §2, β's descender mirrors that of ₿. ß has no descender (it sits entirely on the baseline like other lowercase letters such as "s" or "p" in many fonts), and therefore does not pair as cleanly with ₿ when both symbols appear in the same line of text or table.
+
+Implementations MAY accept ß on input, but SHOULD render and emit β on output.
+
+=== 2. Bits as an interchangeable colloquial term for satoshis ===
+
+[https://github.com/bitcoin/bips/blob/master/bip-0176.mediawiki BIP 176] defined "bits" as a denomination equal to 100 satoshis (i.e. 1 bit = 100 sats, 1,000,000 bits = 1 BTC). In practice that intermediate denomination has seen limited adoption, and the bitcoin ecosystem continues to drift toward two natural units of account: the bitcoin and the satoshi. Maintaining an additional, distinct "bit" denomination at 10<sup>2</sup> sats has produced a recurring source of off-by-100 user error and ambiguity in invoices and price displays.
+
+This BIP recommends, as a coordination point with BIP 176, that the term "bit" be redefined in common usage as a colloquial synonym for "satoshi" — i.e. '''1 bit ≡ 1 sat ≡ 1 β''' — rather than as a distinct 100-sat denomination. The phrase "bits of bitcoin" then becomes a natural, descriptive way to refer to satoshis in spoken and written English, with the satisfying property that the symbol β can be read aloud as "bit" or "beta" interchangeably.
+
+== Backwards Compatibility ==
+
+This proposal introduces no protocol changes. It defines only a display symbol for an existing unit. No consensus rules, transaction formats, RPC interfaces, or on-chain encodings are affected.
+
+For software that currently displays satoshi amounts as "<code>1000 sat</code>", "<code>1,000 sats</code>", or "<code>0.00001000 BTC</code>": adopting β is OPTIONAL. Implementations MAY add β as an additional display option, MAY make it the default, or MAY ignore this BIP entirely.
+
+For parsers that accept user-entered amounts: implementations SHOULD accept β as a trailing unit indicator equivalent to "sat", "sats", or "satoshi", and MAY also accept it as a leading indicator for forgiving input handling. As described in the Interoperability section, implementations MAY additionally accept ß (U+00DF) as an alias for β on input.
+
+The Greek capital letter beta (Β, U+0392) is visually identical to the Latin capital B in most fonts and MUST NOT be used as the satoshi symbol; doing so would create severe ambiguity with the "B" in "BTC".
+
+== Reference Implementation ==
+
+The [https://zeusln.com ZEUS] Lightning wallet will adopt β as the default display symbol for satoshi-denominated amounts in its user interface, alongside ₿ for bitcoin-denominated amounts. Users will be able to opt out and revert to the prior "sat"/"sats" labelling in settings. This provides an initial real-world reference for typography, input handling, and the ß↔β interoperability behaviour described above.
+
+Other wallets, exchanges, block explorers, point-of-sale systems, and Lightning service providers are encouraged to follow suit.
+
+== References ==
+
+* [https://github.com/bitcoin/bips/blob/master/bip-0176.mediawiki BIP 176: Bits Denomination]
+* [https://bitcoin-coder-bob.github.io/SatsSymbol/ The Sats Symbol project] — extended discussion of candidate satoshi glyphs and design constraints
+* Unicode: [https://www.unicode.org/charts/PDF/U0370.pdf Greek and Coptic] (β, U+03B2)
+* Unicode: [https://www.unicode.org/charts/PDF/U20A0.pdf Currency Symbols] (₿, U+20BF)
+* Unicode: [https://www.unicode.org/charts/PDF/U0080.pdf Latin-1 Supplement] (ß, U+00DF)
+
+== Copyright ==
+
+This BIP is licensed under the BSD 2-clause license.
